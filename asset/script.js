@@ -7,8 +7,8 @@ const scoreText = document.getElementById('score-text');
 const playAgainButton = document.getElementById('play-again');
 
 const gridSize = 20;
-const tileCount = canvas.width / gridSize;
-const targetScore = 100;  // Pontuação necessária para vencer
+let tileCount; // Mover para o escopo global
+const targetScore = 100;
 
 let snake = [{ x: 10, y: 10 }];
 let food = { x: 15, y: 15 };
@@ -16,24 +16,32 @@ let dx = 0;
 let dy = 0;
 let score = 0;
 let gameOver = false;
-let gameWon = false; // Variável para verificar se o jogo foi ganho
+let gameWon = false;
 let blinkCounter = 0;
 
-// Carregando imagem da maçã
 const appleImg = new Image();
 appleImg.src = 'asset/images/apple.png';
 let appleImgLoaded = false;
 
 appleImg.onload = function () {
   appleImgLoaded = true;
-  gameLoop(); // Inicia o loop do jogo após o carregamento da imagem
+  gameLoop();
 };
 
 appleImg.onerror = function() {
   console.error("Erro ao carregar a imagem da maçã");
   appleImgLoaded = false;
-  gameLoop(); // Inicia o loop do jogo mesmo se a imagem falhar
+  gameLoop();
 };
+
+// Funções do jogo
+function resizeCanvas() {
+  const size = Math.min(window.innerWidth, window.innerHeight) - 40;
+  canvas.width = size;
+  canvas.height = size;
+  tileCount = Math.floor(canvas.width / gridSize);
+  drawGame();
+}
 
 function drawGame() {
   clearCanvas();
@@ -81,7 +89,7 @@ function drawSnake() {
       ctx.fillRect(segment.x * gridSize + 12, segment.y * gridSize + 3, 4, 4);
     }
   });
-} // cobra
+}
 
 function drawFood() {
   if (blinkCounter > 0) {
@@ -132,22 +140,22 @@ function updateScore() {
 }
 
 function showEndScreen() {
-    overlay.style.display = 'flex'; // Exibe a sobreposição
-  
-    if (gameOver) {
-      gameStatusText.textContent = 'Game Over!';
-      gameStatusText.style.color = '#e94560'; // Cor vermelha para Game Over
-    } else if (gameWon) {
-      gameStatusText.textContent = 'You Win!';
-      gameStatusText.style.color = '#66ff66'; // Cor verde para Vitória
-    }
-  
-    scoreText.textContent = `Score: ${score}`; // Exibe a pontuação final
-  
-    // Adiciona o ouvinte de clique para reiniciar o jogo
-    playAgainButton.addEventListener('click', resetGame);
+  overlay.style.display = 'flex'; // Exibe a sobreposição
+
+  if (gameOver) {
+    gameStatusText.textContent = 'Game Over!';
+    gameStatusText.style.color = '#e94560'; // Cor vermelha para Game Over
+  } else if (gameWon) {
+    gameStatusText.textContent = 'You Win!';
+    gameStatusText.style.color = '#66ff66'; // Cor verde para Vitória
   }
-  
+
+  scoreText.textContent = `Score: ${score}`; // Exibe a pontuação final
+
+  // Adiciona o ouvinte de clique para reiniciar o jogo
+  playAgainButton.addEventListener('click', resetGame);
+}
+
 function gameLoop() {
   drawGame();
   if (!gameOver && !gameWon) {
@@ -158,6 +166,7 @@ function gameLoop() {
 document.addEventListener('keydown', changeDirection);
 canvas.addEventListener('click', handleClick);
 
+// Funções de controle
 function changeDirection(event) {
   const LEFT_KEY = 37;
   const RIGHT_KEY = 39;
@@ -194,6 +203,35 @@ function changeDirection(event) {
   }
 }
 
+// Funções de controle touch
+document.getElementById('up').addEventListener('click', () => {
+  if (dy === 0) {
+    dx = 0;
+    dy = -1;
+  }
+});
+
+document.getElementById('down').addEventListener('click', () => {
+  if (dy === 0) {
+    dx = 0;
+    dy = 1;
+  }
+});
+
+document.getElementById('left').addEventListener('click', () => {
+  if (dx === 0) {
+    dx = -1;
+    dy = 0;
+  }
+});
+
+document.getElementById('right').addEventListener('click', () => {
+  if (dx === 0) {
+    dx = 1;
+    dy = 0;
+  }
+});
+
 function handleClick(event) {
   if (gameOver || gameWon) {
     const rect = canvas.getBoundingClientRect();
@@ -209,16 +247,17 @@ function handleClick(event) {
 }
 
 function resetGame() {
-    overlay.style.display = 'none';
-    snake = [{ x: 10, y: 10 }];
-    food = { x: 15, y: 15 };
-    dx = 0;
-    dy = 0;
-    score = 0;
-    gameOver = false;
-    gameWon = false;
-    gameLoop(); // Inicia o loop do jogo novamente
+  overlay.style.display = 'none';
+  snake = [{ x: 10, y: 10 }];
+  food = { x: 15, y: 15 };
+  dx = 0;
+  dy = 0;
+  score = 0;
+  gameOver = false;
+  gameWon = false;
+  gameLoop(); // Inicia o loop do jogo novamente
 }
 
-  
-
+// Inicializa o canvas
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();

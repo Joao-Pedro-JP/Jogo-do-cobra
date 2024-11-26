@@ -6,27 +6,85 @@
     <title>Snake Game</title>
     <link rel="stylesheet" href="asset/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a2e;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+        }
+        #game-container {
+            position: relative;
+        }
+        #game-board {
+            border: 1px solid white;
+        }
+        .overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .button {
+            background-color: #e94560;
+            border: none;
+            color: white;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .control-button {
+            width: 50px;
+            height: 50px;
+            background-color: #08f500;
+            border: none;
+            color: white;
+            font-size: 24px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div id="game-over-overlay" class="overlay">
         <div id="game-over-text">
-          <h1 id="game-status">Game Over</h1>
-          <p id="score-text">Score: 0</p>
-          <button id="play-again">Play Again</button>
+            <h1 id="game-status">Game Over</h1>
+            <p id="score-text">Score: 0</p>
+            <button id="play-again" class="button">Play Again</button>
         </div>
-      </div>
+    </div>
     <div id="game-container">
         <h1>Snake Game</h1>
         <canvas id="game-board" width="400" height="400"></canvas>
         <div id="score">Score: <span id="score-value">0</span></div>
+        <div class="controls">
+            <button class="control-button" id="up">↑</button>
+            <div>
+                <button class="control-button" id="left">←</button>
+                <button class="control-button" id="right">→</button>
+            </div>
+            <button class="control-button" id="down">↓</button>
+        </div>
     </div>
     
-      
     <script src="asset/script.js"></script>
 </body>
 </html>
-
-
-
-
-
